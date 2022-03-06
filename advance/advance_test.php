@@ -2,7 +2,7 @@
 
 //namespace Befeni\Model;
 
-require_once( 'conf.php'); // connection configuration file
+
 /**
 * A test Shirt Order model
 */
@@ -71,27 +71,43 @@ class ShirtOrder
 
 	if ($where) { $query .=  " " . $where ; } 
 
-    try{$connection = DB_Access::initDB();}catch(Exception $e){throw Exception($e->getMessage());}
-    try{$result = DB_Access::issueQuery($connection, $query);}catch(Exception $e){throw Exception($e->getMessage());}
-    
-    //Prepare Data:
-    $rowArray;
-    $rowID = 1;
-    while($row = DB_Access::fetchRow($result)){
-                $rowArray[$rowID]['id']                           = $row['id'];
-                $rowArray[$rowID]['customer_id']                  = $row['customer_id'];
-                $rowArray[$rowID]['fabric_id']                    = $row['fabric_id'];
-                $rowArray[$rowID]['colar_size']                   = $row['colar_size'];
-                $rowArray[$rowID]['waist_size']                   = $row['waist_size'];
-				$rowArray[$rowID]['wrest_size']                   = $row['wrest_size'];
-                
+   
 
-                $rowID++;
-    }  
-    
-    DB_Access::closeDB($connection);
+try {
+    require('conf.php') ;
+   // $connection->beginTransaction();
+   // execute a query
+	$list_shirts = $connection->query($query);
 
-    return $rowArray;
+  //Prepare Data:
+  $rowArray;
+  $rowID = 1;
+
+  while ($row = $list_shirts->fetch()) {
+	
+			  $rowArray[$rowID]['id']                           = $row['id'];
+			  $rowArray[$rowID]['customer_id']                  = $row['customer_id'];
+			  $rowArray[$rowID]['fabric_id']                    = $row['fabric_id'];
+			  $rowArray[$rowID]['colar_size']                   = $row['colar_size'];
+			  $rowArray[$rowID]['waist_size']                   = $row['waist_size'];
+			  $rowArray[$rowID]['wrest_size']                   = $row['wrest_size'];
+			  
+
+			  $rowID++;
+  }  
+  
+  //DB_Access::closeDB($connection);
+
+  return $rowArray;
+
+
+} catch(Exception $e) {
+
+    $connection->rollback();
+    throw $e;
+}
+
+  
 }
 
 
@@ -110,12 +126,23 @@ public static function update_shirt_order($table_array, $where = null) {
 
 	if ($where) { $query .=  " " . $where ; } 
 
-    try{$connection = DB_Access::initDB();}catch(Exception $e){throw Exception($e->getMessage());}
-    try{$result = DB_Access::issueQuery($connection, $query);}catch(Exception $e){throw Exception($e->getMessage());}
+ 
+try {
+    require('conf.php') ;
+    $connection->beginTransaction();
+    $stm = $connection->exec($query );
     
+
+    $connection->commit();
+
+} catch(Exception $e) {
+
+    $connection->rollback();
+    throw $e;
+}
+
     
-    
-    DB_Access::closeDB($connection);
+    $connection = null ; 
 
     return $result;
 }
@@ -136,12 +163,29 @@ public static function add_shirt_order($table_array, $where = null) {
 
 	 if ($where) { $query .=  " " . $where ; } 
 
-    try{$connection = DB_Access::initDB();}catch(Exception $e){throw Exception($e->getMessage());}
-    try{$result = DB_Access::issueQuery($connection, $query);}catch(Exception $e){throw Exception($e->getMessage());}
+   // try{$connection = DB_Access::initDB();}catch(Exception $e){throw Exception($e->getMessage());}
+  //  try{$result = DB_Access::issueQuery($connection, $query);}catch(Exception $e){throw Exception($e->getMessage());}
     
     
+
+
+try {
+	require('conf.php') ;
+    $connection->beginTransaction();
+    $stm = $connection->exec($query );
     
-    DB_Access::closeDB($connection);
+
+    $connection->commit();
+
+} catch(Exception $e) {
+
+    $connection->rollback();
+    throw $e;
+}
+
+
+    
+    $connection = null ; 
 
     return $result;
 }
@@ -158,10 +202,23 @@ public static function delete_shirt_order($table_array, $where = null) {
 
 	if ($where) { $query .=  " " . $where ; } 
 
-    try{$connection = DB_Access::initDB();}catch(Exception $e){throw Exception($e->getMessage());}
-    try{$result = DB_Access::issueQuery($connection, $query);}catch(Exception $e){throw Exception($e->getMessage());}
+   
+try {
+    require('conf.php') ;
+    $connection->beginTransaction();
+    $stm = $connection->exec($query );
     
-    DB_Access::closeDB($connection);
+
+    $connection->commit();
+
+} catch(Exception $e) {
+
+    $connection->rollback();
+    throw $e;
+}
+
+
+    $connection = null ; 
 
     return $result;
 }
@@ -182,14 +239,12 @@ echo json_encode($testObject->select_shirt_order());
 /* 
 Notes : 
 you can also use the add / update by passing Array
-
 ex : 
  $table_array['customer_id'] = 1 
  $table_array['fabric_id']  = 1
  $table_array['colar_size']  = 24
  $table_array['waist_size'] = 34
  $table_array['wrest_size']  =3 5
-
  update_shirt_order($table_array) ; 
 */
 
