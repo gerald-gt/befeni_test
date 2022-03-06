@@ -1,6 +1,6 @@
 <?php
 
-namespace Befeni\Model;
+//namespace Befeni\Model;
 
 require_once( 'conf.php'); // connection configuration file
 /**
