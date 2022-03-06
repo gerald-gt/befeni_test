@@ -173,5 +173,26 @@ public static function delete_shirt_order($table_array, $where = null) {
 
 
 
+// select all records sample code by Gerald
+
+$testObject = new ShirtOrder();
+
+echo json_encode($testObject->select_shirt_order());
+
+/* 
+Notes : 
+you can also use the add / update by passing Array
+
+ex : 
+ $table_array['customer_id'] = 1 
+ $table_array['fabric_id']  = 1
+ $table_array['colar_size']  = 24
+ $table_array['waist_size'] = 34
+ $table_array['wrest_size']  =3 5
+
+ update_shirt_order($table_array) ; 
+*/
+
+
 
 ?>
