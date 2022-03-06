@@ -31,7 +31,7 @@ First you must set up data source connection setting in conf.php
 ( Databse Name , Database Host , Database Password , Database User )
 
 To run this you need to install MySQL  and restore the database to your local or remote environment 
-Folder db/database.sql
+Path database script  DB/database.sql
 
 	•	
 	•	Linux users can install php using the following command.
@@ -44,8 +44,6 @@ Folder db/database.sql
 	•	php file_name.php
 
 If you have Apache running on your server just use http://localhost/{ path to the file }
-
-
 
 
 
